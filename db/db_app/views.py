@@ -62,7 +62,7 @@ class ContactsDetail(APIView):
 	def post(self, request, format=None):
 		if Contacts.objects.all().count() != 0:
 			return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-		serializer = ArticleSerializer(data=request.data)
+		serializer = ContactsSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
