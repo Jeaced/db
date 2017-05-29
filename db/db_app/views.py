@@ -1,6 +1,7 @@
 from db_app.models import Article, User, Contacts
 from db_app.serializers import ArticleSerializer, UserSerializer, ContactsSerializer
 from django.http import Http404
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -49,7 +50,12 @@ class ArticleDetail(APIView):
 class ArticleSearch(APIView):
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 	def get(self, request, keyword, format=None):
-		articles = Article.objects.filter(keywords__contains=keyword)
+		values = keyword.split('&')
+		queries = [Q(keywords__contains=value) for value in values]
+		query = queries.pop()
+		for item in queries:
+			query |= item
+		articles = Article.objects.filter(query)
 		serializer = ArticleSerializer(articles, many=True)
 		return Response(serializer.data)
 
