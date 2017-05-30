@@ -19,6 +19,12 @@ class User(models.Model):
 	alias = models.CharField(max_length=100)
 	email = models.EmailField()
 	preferredLanguage = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='EN')
+	state = models.IntegerField(default=0)
+	activationKey = models.CharField(max_length=100, default='')
+
+class Feedback(models.Model):
+	alias = models.CharField(max_length=100)
+	text = models.TextField()
 
 class Contacts(models.Model):
 	info = models.TextField(default='')

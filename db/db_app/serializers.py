@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from db_app.models import Article, User, Contacts
+from db_app.models import Article, User, Contacts, Feedback
 
 class ArticleSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -9,7 +9,12 @@ class ArticleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'alias', 'email', 'preferredLanguage',)
+		fields = ('id', 'alias', 'email', 'preferredLanguage', 'state', 'activationKey',)
+
+class FeedbackSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Feedback
+		fields = ('id', 'alias', 'text',)
 
 class ContactsSerializer(serializers.ModelSerializer):
 	class Meta:
