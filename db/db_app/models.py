@@ -8,9 +8,6 @@ class Article(models.Model):
 	text = models.TextField()
 	keywords = models.TextField()
 
-	class Meta:
-		ordering = ('created',)
-
 class User(models.Model):
 	LANGUAGE_CHOICES = (
 		('EN', 'English'),
