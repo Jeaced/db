@@ -1,7 +1,7 @@
 from db_app.models import Article, User, Contacts, Feedback
 from db_app.serializers import ArticleSerializer, UserSerializer, ContactsSerializer, FeedbackSerializer
 from django.http import Http404
-from django.db.models import Q
+from django.db.models import Q, F
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -55,7 +55,7 @@ class ArticleSearch(APIView):
 		query = queries.pop()
 		for item in queries:
 			query |= item
-		articles = Article.objects.filter(query)
+		articles = Article.objects.filter(query).annotate(ordering=(F('likeCount') / (F('viewCount') + 1))).order_by('-ordering')
 		serializer = ArticleSerializer(articles, many=True)
 		return Response(serializer.data)
 
@@ -163,3 +163,29 @@ class FeedbackDetail(APIView):
 		feedback = self.get_object(pk)
 		feedback.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ViewIncrement(APIView):
+	def get_object(self, pk):
+		try:
+			return Article.objects.get(pk=pk)
+		except Article.DoesNotExist:
+			raise Http404
+
+	def post(self, request, pk, format=None):
+		article = self.get_object(pk)
+		article.viewCount = F('viewCount') + 1
+		article.save()
+		return Response(status=status.HTTP_200_OK)
+
+class LikeIncrement(APIView):
+	def get_object(self, pk):
+		try:
+			return Article.objects.get(pk=pk)
+		except Article.DoesNotExist:
+			raise Http404
+
+	def post(self, request, pk, format=None):
+		article = self.get_object(pk)
+		article.likeCount = F('likeCount') + 1
+		article.save()
+		return Response(status=status.HTTP_200_OK)		
