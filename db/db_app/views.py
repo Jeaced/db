@@ -55,7 +55,7 @@ class ArticleSearch(APIView):
 		query = queries.pop()
 		for item in queries:
 			query |= item
-		articles = Article.objects.filter(query).order_by('-relevance')[:5]
+		articles = Article.objects.filter(query).order_by('-relevance')[:2]
 		serializer = ArticleSerializer(articles, many=True)
 		return Response(serializer.data)
 
