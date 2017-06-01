@@ -5,8 +5,8 @@ class Article(models.Model):
 	title = models.CharField(max_length=200, default='')
 	viewCount = models.PositiveIntegerField(default=0)
 	likeCount = models.PositiveIntegerField(default=0)
-	text = models.TextField()
-	keywords = models.TextField()
+	text = models.TextField(default='')
+	keywords = models.TextField(default='')
 	relevance = models.FloatField(default=0)
 
 	def save(self, **kwargs):
@@ -18,15 +18,18 @@ class User(models.Model):
 		('EN', 'English'),
 		('RU', 'Russian'),
 		)
-	alias = models.CharField(max_length=100)
-	email = models.EmailField()
+	chatID = models.CharField(max_length=100, default='')
+	userID = models.CharField(max_length=100, default='')
+	email = models.CharField(max_length=100)
 	preferredLanguage = models.CharField(max_length=2, choices=LANGUAGE_CHOICES, default='EN')
 	state = models.IntegerField(default=0)
 	activationKey = models.CharField(max_length=100, default='')
 
 class Feedback(models.Model):
-	alias = models.CharField(max_length=100)
-	text = models.TextField()
+	name = models.CharField(max_length=100, default='')
+	email = models.CharField(max_length=100, default='')
+	grade = models.IntegerField(default=0)
+	text = models.TextField(default='')
 
 class Contacts(models.Model):
 	info = models.TextField(default='')

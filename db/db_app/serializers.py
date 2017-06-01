@@ -9,12 +9,12 @@ class ArticleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'alias', 'email', 'preferredLanguage', 'state', 'activationKey',)
+		fields = ('id', 'userID', 'chatID', 'email', 'preferredLanguage', 'state', 'activationKey',)
 
 class FeedbackSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Feedback
-		fields = ('id', 'alias', 'text',)
+		fields = ('id', 'name', 'text', 'grade', 'email',)
 
 class ContactsSerializer(serializers.ModelSerializer):
 	class Meta:
