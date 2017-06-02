@@ -59,6 +59,17 @@ class ArticleSearch(APIView):
 		serializer = ArticleSerializer(articles, many=True)
 		return Response(serializer.data)
 
+class UserSearch(APIView):
+	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+	def get(self, request, email, format=None):
+		try:
+			user = User.objects.get(email=email)
+			serializer = UserSerializer(user)
+			return Response(serializer.data)
+		except User.DoesNotExist:
+			raise Http404
+				
+
 class ContactsDetail(APIView):
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 	def get(self, request, format=None):

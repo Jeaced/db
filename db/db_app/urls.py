@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^contact_info/', views.ContactsDetail.as_view()),
     url(r'^users/$', views.UserList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+    url(r'^users/(?P<email>.+)/$', views.UserSearch.as_view()),
     url(r'^view_increment/(?P<pk>[0-9]+)/$', views.ViewIncrement.as_view()),
     url(r'^like_increment/(?P<pk>[0-9]+)/$', views.LikeIncrement.as_view()),
     url(r'^feedback/$', views.FeedbackList.as_view()),
