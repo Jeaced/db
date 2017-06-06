@@ -4,7 +4,7 @@ from db_app.models import Article, User, Contacts, Feedback
 class ArticleSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Article
-		fields = ('created', 'text', 'keywords', 'id', 'title', 'viewCount', 'likeCount',)
+		fields = ('created', 'text', 'keywords', 'id', 'title', 'viewCount', 'likeCount', 'relevance',)
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
