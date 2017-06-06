@@ -180,9 +180,12 @@ class ViewIncrement(APIView):
 
 	def post(self, request, pk, format=None):
 		article = self.get_object(pk)
-		article.viewCount = F('viewCount') + 1
-		article.save()
-		return Response(status=status.HTTP_200_OK)
+		article.viewCount = article.viewCount + 1
+		serializer = ArticleSerializer(article, data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_204_NO_CONTENT)
 
 class LikeIncrement(APIView):
 	def get_object(self, pk):
@@ -193,6 +196,9 @@ class LikeIncrement(APIView):
 
 	def post(self, request, pk, format=None):
 		article = self.get_object(pk)
-		article.likeCount = F('likeCount') + 1
-		article.save()
-		return Response(status=status.HTTP_200_OK)		
+		article.likeCount = article.likeCount + 1
+		serializer = ArticleSerializer(article, data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_204_NO_CONTENT)		
