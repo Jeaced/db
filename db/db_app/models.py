@@ -9,9 +9,11 @@ class Article(models.Model):
 	keywords = models.TextField(default='')
 	relevance = models.FloatField(default=0)
 
-	def save(self, **kwargs):
+	def save(self, *args, **kwargs):
 		self.relevance = self.likeCount/(self.viewCount + 1)
-		super(Article, self).save()
+		super(Article, self).save(*args, **kwargs)
+
+	
 
 class User(models.Model):
 	LANGUAGE_CHOICES = (
