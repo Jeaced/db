@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from db_app import views
-from db_app.models import Article, User, Contacts
+from db_app.models import Article, User, Contacts, Feedback
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient, APIRequestFactory, force_authenticate
 from rest_framework.test import force_authenticate
@@ -197,3 +197,56 @@ class ContactsTests(APITestCase):
 		response = client.get('/db/contact_info/', format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data[0]['info'], 'test_info')
+
+class FeedbackTests(APITestCase):
+
+	def setUp(self):
+		US.objects.create(username='admin')
+
+	def test_create_feedback(self):
+		"""
+		Ensure we can create new Feedback object
+		"""
+		user = US.objects.get(username='admin')
+		client = APIClient()
+		client.force_authenticate(user=user)
+		data = {'email': 'test_user'}
+		response = client.post('/db/feedback/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		self.assertEqual(Feedback.objects.count(), 1)
+		self.assertEqual(Feedback.objects.get().email, 'test_user')
+
+	def test_change_feedback(self):
+		"""
+		Ensure we can change Feedback objects
+		"""
+		feedback = Feedback.objects.create(email='test_user')
+		user = US.objects.get(username='admin')
+		data = {'email': 'changed_email'}
+		client = APIClient()
+		client.force_authenticate(user=user)
+		response = client.put('/db/feedback/1/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(Feedback.objects.get().email, 'changed_email')
+
+	def test_delete_feedback(self):
+		"""
+		Ensure we can delete Feedback objects
+		"""
+		feedback = Feedback.objects.create(email='test_user')
+		user = US.objects.get(username='admin')
+		client = APIClient()
+		client.force_authenticate(user=user)
+		response = client.delete('/db/feedback/1/', format='json')
+		self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+		self.assertEqual(Feedback.objects.count(), 0)
+
+	def test_get_feedback(self):
+		"""
+		Ensure we can get Feedback objects
+		"""
+		feedback = Feedback.objects.create(email='test_user')
+		client = APIClient()
+		response = client.get('/db/feedback/1/', format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data['email'], 'test_user')
