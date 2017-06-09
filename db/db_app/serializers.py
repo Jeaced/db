@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from db_app.models import Article, User, Contacts, Feedback
+from db_app.models import Article, User, Contacts, Feedback, Invite
 
 class ArticleSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -20,3 +20,8 @@ class ContactsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Contacts
 		fields = ('info',)
+
+class InviteSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Invite
+		fields = ('id', 'invite', 'email', 'is_valid',)

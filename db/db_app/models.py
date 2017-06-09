@@ -35,3 +35,8 @@ class Feedback(models.Model):
 
 class Contacts(models.Model):
 	info = models.TextField(default='')
+
+class Invite(models.Model):
+	invite = models.CharField(max_length=200, unique=True)
+	email = models.CharField(max_length=100, default='')
+	is_valid = models.IntegerField(default=0)

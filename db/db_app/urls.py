@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^like_increment/(?P<pk>[0-9]+)/$', views.LikeIncrement.as_view()),
     url(r'^feedback/$', views.FeedbackList.as_view()),
     url(r'^feedback/(?P<pk>[0-9]+)/$', views.FeedbackDetail.as_view()),
+    url(r'^invites/$', views.InviteList.as_view()),
+    url(r'^invites/(?P<pk>[0-9]+)/$', views.InviteDetail.as_view()),
     url(r'^(?P<pk>[0-9]+)/$', views.ArticleDetail.as_view(), name='article-detail'),
     url(r'^(?P<keyword>.+)/$', views.ArticleSearch.as_view()),
    
