@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from db_app import views
-from db_app.models import Article, User, Contacts, Feedback
+from db_app.models import Article, User, Contacts, Feedback, Invite
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient, APIRequestFactory, force_authenticate
 from rest_framework.test import force_authenticate
@@ -250,3 +250,58 @@ class FeedbackTests(APITestCase):
 		response = client.get('/db/feedback/1/', format='json')
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data['email'], 'test_user')
+
+class InviteTests(APITestCase):
+
+	def setUp(self):
+		US.objects.create(username='admin')
+
+	def test_create_invite(self):
+		"""
+		Ensure we can create new Invite object
+		"""
+		user = US.objects.get(username='admin')
+		client = APIClient()
+		client.force_authenticate(user=user)
+		data = {'invite': 'test_invite'}
+		response1 = client.post('/db/invites/', data, format='json')
+		response2 = client.post('/db/invites/', data, format='json')
+		self.assertEqual(response1.status_code, status.HTTP_201_CREATED)
+		self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
+		self.assertEqual(Invite.objects.count(), 1)
+		self.assertEqual(Invite.objects.get().invite, 'test_invite')
+
+	def test_change_invite(self):
+		"""
+		Ensure we can change Invite objects
+		"""
+		invite = Invite.objects.create(invite='test_invite')
+		user = US.objects.get(username='admin')
+		data = {'invite': 'changed_invite'}
+		client = APIClient()
+		client.force_authenticate(user=user)
+		response = client.put('/db/invites/1/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(Invite.objects.get().invite, 'changed_invite')
+
+	def test_delete_invite(self):
+		"""
+		Ensure we can delete Invite objects
+		"""
+		invite = Invite.objects.create(invite='test_invite')
+		user = US.objects.get(username='admin')
+		client = APIClient()
+		client.force_authenticate(user=user)
+		response = client.delete('/db/invites/1/', format='json')
+		self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+		self.assertEqual(Invite.objects.count(), 0)
+
+	def test_get_invite(self):
+		"""
+		Ensure we can get Invite objects
+		"""
+		invite = Invite.objects.create(invite='test_invite')
+		client = APIClient()
+		response = client.get('/db/invites/1/', format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertEqual(response.data['invite'], 'test_invite')
