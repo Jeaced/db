@@ -9,7 +9,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'userID', 'chatID', 'email', 'preferredLanguage', 'state', 'activationKey',)
+		fields = ('id', 'userID', 'chatID', 'email', 'preferredLanguage', 'state', 'ticketID', 'rating', 'messageContent', 'messageAtt',  'activationKey',)
 
 class FeedbackSerializer(serializers.ModelSerializer):
 	class Meta:
