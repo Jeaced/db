@@ -24,6 +24,7 @@ class User(models.Model):
 	userID = models.CharField(max_length=100, default='')
 	ticketID = models.IntegerField(default=0)
 	rating = models.IntegerField(default=0)
+	activationDate = models.CharField(max_length=100, default='')
 	messageContent = models.TextField(default='')
 	messageAtt = models.CharField(max_length=200, default='')
 	email = models.CharField(max_length=100, unique=True)
